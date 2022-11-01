@@ -39,7 +39,7 @@
             return $returnValue;
         }
 
-        public static function TrimEdgeQuotes($str, array $trimCharArray = array("'", '"', '`')) {
+        public static function TrimEdges($str, array $trimCharArray = array("'", '"', '`')) {
             if (!is_string($str))
                 return $str;
 
@@ -164,17 +164,17 @@ CREATE TABLE `testdatabase`.`test` (
             if (count($parsedQueryArray) < 2)
                 return $this->SetCurrentError(1, "CREATE TABLE");
 
-            $tableName = self::TrimEdgeQuotes(array_shift($parsedQueryArray));
+            $tableName = self::TrimEdges(array_shift($parsedQueryArray));
 
-            if (($value = self::TrimEdgeQuotes(array_shift($parsedQueryArray))) == ".") {
+            if (($value = self::TrimEdges(array_shift($parsedQueryArray))) == ".") {
                 $databaseName = $tableName;
 
-                if (is_array(($value = self::TrimEdgeQuotes(array_shift($parsedQueryArray))))) 
+                if (is_array(($value = self::TrimEdges(array_shift($parsedQueryArray))))) 
                     return $this->SetCurrentError(1, "You have an error in your SQL syntax near: " . self::GetQuery($parsedQueryArray));
                 
                 $tableName = $value;
                 
-                $value = self::TrimEdgeQuotes(array_shift($parsedQueryArray));
+                $value = self::TrimEdges(array_shift($parsedQueryArray));
             } else {
                 if (($databaseName = $this->selectedDatabase) == "")
                     return $this->SetCurrentError(1, "No Database Selected.");
@@ -196,7 +196,7 @@ CREATE TABLE `testdatabase`.`test` (
 
             print_r($value);
 
-            $fieldInfo = self::TrimEdgeQuotes(array_shift($value));
+            $fieldInfo = self::TrimEdges(array_shift($value));
 
             do {
                 if ($fieldInfo == ",") {
@@ -224,7 +224,7 @@ CREATE TABLE `testdatabase`.`test` (
                     $fieldsInfoArray[$currentFieldName]["type"] = $fieldInfo;
 
                     if (is_array($value[0])) {
-                        $fieldsInfoArray[$currentFieldName]["length"] = self::TrimEdgeQuotes(self::GetQuery(array_shift($value)), array("(", ")"));
+                        $fieldsInfoArray[$currentFieldName]["length"] = self::TrimEdges(self::GetQuery(array_shift($value)), array("(", ")"));
                     } else if ($value[0] == "UNSIGNED") {
                         $fieldsInfoArray[$currentFieldName]["type"] .= " " . array_shift($value);
                     }
@@ -245,14 +245,14 @@ CREATE TABLE `testdatabase`.`test` (
                 if (count($value) == 0)
                     break;
 
-                $fieldInfo = self::TrimEdgeQuotes(array_shift($value));
+                $fieldInfo = self::TrimEdges(array_shift($value));
 
             } while (true);            
             
             print_r($parsedQueryArray);
 
             while (count($parsedQueryArray) > 0) {
-                $value = self::TrimEdgeQuotes(array_shift($parsedQueryArray));
+                $value = self::TrimEdges(array_shift($parsedQueryArray));
 
                 if ($value == ";")
                     return $this->databases[$databaseName]->CreateTable($tableName, $fieldsInfoArray);                

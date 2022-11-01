@@ -55,6 +55,10 @@
             if (($fileData = file_get_contents($filePath)) === false)
                 return false;
 
+            print_r($fileData);
+            print_r(unserialize($fileData));
+            die();
+
             list ($this->tablesInfo, $this->tables) = unserialize($fileData);
 
             $this->needsSaved = false;
